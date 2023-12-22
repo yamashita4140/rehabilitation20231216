@@ -18,3 +18,10 @@ orl.weight = 100  # インスタンス変数 weightの更新
 orl.color = "light orange"  # インスタンス変数 colorの更新
 print(orl.weight)  # 更新したインスタンス変数 weightの値の表示
 print(orl.color)  # 更新したインスタンス変数 colorの値の表示
+
+orl2 = Orange(w=60, c="dark orange")
+print(orl2.weight)
+print(orl2.color)
+orl3 = Orange(w=55, c="yellow")
+print(orl3.weight)
+print(orl3.color)
