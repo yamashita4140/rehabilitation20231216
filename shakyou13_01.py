@@ -9,5 +9,12 @@ class Shape:
         print("{} by {}".format(self.width, self.length))
 
 
-my_shape = Shape(w=10, l=20)
-my_shape.print_size()
+class Square(Shape):  # Shapeクラスを継承してSquareクラスを定義
+    pass
+
+
+a_square = Square(w=30, l=30)
+a_square.print_size()   # 親クラスから継承したprint_sizeメソッドの呼び出し
+
+# my_shape = Shape(w=10, l=20)
+# my_shape.print_size()
