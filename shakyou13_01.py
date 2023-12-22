@@ -13,10 +13,15 @@ class Square(Shape):  # Shapeクラスを継承してSquareクラスを定義
     def area(self):     # Squareクラス独自のareaメソッドを追加
         return self.width*self.length
 
+    def print_size(self):   # メソッドのオーバーライド
+        print("I am {} by {}".format(self.width,self.length))
+
+
 
 a_square = Square(w=30, l=30)
-a_square.print_size()   # 親クラスから継承したprint_sizeメソッドの呼び出し
+a_square.print_size()   # オーバーライドしたメソッドの呼び出し
 print(a_square.area())  # Squareクラスに追加したareaメソッドの呼び出し
+
 
 
 # my_shape = Shape(w=10, l=20)
