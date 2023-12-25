@@ -12,12 +12,12 @@ class Card:
 
     # カードの値の定義 0番、1番は未使用。添字の値がそのままカードの強さになる
 
-    def __init__(self, v, s):   # カードの生成
+    def __init__(self, v, s):  # カードの生成
         """スートも値も整数値"""
         self.value = v
         self.suit = s
 
-    def __lt__(self, c2):   # 特殊メソッド 相手と比較して自分が小さければ True を返す
+    def __lt__(self, c2):  # 特殊メソッド 相手と比較して自分が小さければ True を返す
         if self.value < c2.value:
             return True
         if self.value == c2.value:
@@ -27,7 +27,7 @@ class Card:
                 return False
         return False
 
-    def __gt__(self, c2):   # 特殊メソッド 相手と比較して自分が大きければ True を返す
+    def __gt__(self, c2):  # 特殊メソッド 相手と比較して自分が大きければ True を返す
         if self.value > c2.value:
             return True
         if self.value == c2.value:
@@ -37,20 +37,20 @@ class Card:
                 return False
         return False
 
-    def __repr__(self): # 出力時にスートと値を出力する
+    def __repr__(self):  # 出力時にスートと値を出力する
         v = self.values[self.value] + " of " + self.suits[self.suit]
         return v
 
 
 class Deck:
     def __init__(self):
-        self.cards = []     # デッキのリスト
+        self.cards = []  # デッキのリスト
         # カードの生成(2重ループを使い、52枚のカードを生成)
         for i in range(2, 15):
             for j in range(4):
                 self.cards.append(Card(i, j))
                 # 生成したカードインスタンスをリストに追加
-        shuffle(self.cards)     # デッキをシャッフルする
+        shuffle(self.cards)  # デッキをシャッフルする
 
     def rm_card(self):  # デッキの上(リストの先頭)から1枚ずつカードを取り出すメソッド
         if len(self.cards) == 0:
@@ -70,21 +70,23 @@ class Game:
         name1 = input("Player1 Name: ")
         name2 = input("Player2 Name: ")
         self.deck = Deck()  # デッキインスタンスの生成
-        self.p1 = Player(name1) # Player1インスタンスの生成
-        self.p2 = Player(name2) # Player2インスタンスの生成
+        self.p1 = Player(name1)  # Player1インスタンスの生成
+        self.p2 = Player(name2)  # Player2インスタンスの生成
+        self.cnt_round = 0  # ラウンドのカウンタ
 
-    def wins(self, winner): # 勝利者の出力メソッド
+    def wins(self, winner):  # 勝利者の出力メソッド
         w = "{} won this round."
         w = w.format(winner)
         print(w)
 
-    def draw(self, p1n, p1c, p2n, p2c): # 引いたカードの表示メソッド
+    def draw(self, p1n, p1c, p2n, p2c):  # 引いたカードの表示メソッド
         d = "{} draw {} and {} draw {}."
         d = d.format(p1n, p1c, p2n, p2c)
         print(d)
 
     def play_game(self):
         cards = self.deck.cards
+
         print("Start the war!!")
 
         while len(cards) >= 2:
@@ -92,10 +94,13 @@ class Game:
             response = input(m)
             if response == "q":
                 break
-            p1c = self.deck.rm_card()   # Player1がカードを1枚引く(デッキインスタンスのrm_cardメソッド)
-            p2c = self.deck.rm_card()   # Player2がカードを1枚引く
+            p1c = self.deck.rm_card()  # Player1がカードを1枚引く(デッキインスタンスのrm_cardメソッド)
+            p2c = self.deck.rm_card()  # Player2がカードを1枚引く
             p1n = self.p1.name
             p2n = self.p2.name
+
+            self.cnt_round += 1
+            print("Round {}...".format(self.cnt_round))
             self.draw(p1n, p1c, p2n, p2c)
             # ラウンドの勝利判定
             if p1c > p2c:
@@ -104,11 +109,12 @@ class Game:
             else:
                 self.p2.wins += 1
                 self.wins(self.p2.name)
+            print("{} {} wins : {} {} wins.".format(p1n, self.p1.wins, p2n, self.p2.wins))
 
         win = self.winner(self.p1, self.p2)
-        print("The war is over...{} is winning!".format(win))
+        print("The war is over... {} is winning!".format(win))
 
-    def winner(self, p1, p2):   # 勝者の名前を返すメソッド
+    def winner(self, p1, p2):  # 勝者の名前を返すメソッド
         if p1.wins > p2.wins:
             return p1.name
         if p2.wins > p1.wins:
