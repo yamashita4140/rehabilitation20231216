@@ -35,7 +35,7 @@ class Card:
         return False
 
     def __repr__(self):
-        v = self.values[self.value] + "of" + self.suits[self.suit]
+        v = self.values[self.value] + " of " + self.suits[self.suit]
         return v
 
 
@@ -99,7 +99,7 @@ class Game:
                 self.p2.wins += 1
                 self.wins(self.p2.name)
 
-        win = self.winners(self.p1, self.p2)
+        win = self.winner(self.p1, self.p2)
         print("The war is over...{} is winning!".format(win))
 
     def winner(self, p1, p2):
@@ -108,3 +108,7 @@ class Game:
         if p2.wins > p1.wins:
             return p2.name
         return "Draw!!"
+
+
+game = Game()
+game.play_game()
