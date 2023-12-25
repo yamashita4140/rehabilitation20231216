@@ -21,20 +21,22 @@ class Card:
         if self.value < c2.value:
             return True
         if self.value == c2.value:
-            if self.value < c2.suit:
-                return True
-            else:
-                return False
+            return self.suit < c2.suit
+            # if self.value < c2.suit:
+            #     return True
+            # else:
+            #     return False
         return False
 
     def __gt__(self, c2):  # 特殊メソッド 相手と比較して自分が大きければ True を返す
         if self.value > c2.value:
             return True
         if self.value == c2.value:
-            if self.suit > c2.suit:
-                return True
-            else:
-                return False
+            return self.suit > c2.suit
+            # if self.suit > c2.suit:
+            #     return True
+            # else:
+            #     return False
         return False
 
     def __repr__(self):  # 出力時にスートと値を出力する
@@ -52,7 +54,7 @@ class Deck:
                 # 生成したカードインスタンスをリストに追加
         shuffle(self.cards)  # デッキをシャッフルする
 
-    def rm_card(self):  # デッキの上(リストの先頭)から1枚ずつカードを取り出すメソッド
+    def draw(self):  # デッキの上(リストの先頭)から1枚ずつカードを取り出すメソッド
         if len(self.cards) == 0:
             return  # カードが1枚もなければNoneを返す
         return self.cards.pop()
@@ -74,15 +76,19 @@ class Game:
         self.p2 = Player(name2)  # Player2インスタンスの生成
         self.cnt_round = 0  # ラウンドのカウンタ
 
-    def wins(self, winner):  # 勝利者の出力メソッド
+    def print_winner(self, winner):  # 勝利者の出力メソッド
         w = "{} won this round."
-        w = w.format(winner)
+        w = w.format(winner.name)
         print(w)
 
-    def draw(self, p1n, p1c, p2n, p2c):  # 引いたカードの表示メソッド
+    def print_draw(self, p1, p2):  # 引いたカードの表示メソッド
         d = "{} draw {} and {} draw {}."
-        d = d.format(p1n, p1c, p2n, p2c)
+        d = d.format(p1.name, p1.card, p2.name, p2.card)
         print(d)
+
+    def print_score(self, p1, p2):
+        str_score = "{} {} wins : {} {} wins."
+        print(str_score.format(p1.name, p1.wins, p2.name, p2.wins))
 
     def play_game(self):
         cards = self.deck.cards
@@ -94,22 +100,22 @@ class Game:
             response = input(m)
             if response == "q":
                 break
-            p1c = self.deck.rm_card()  # Player1がカードを1枚引く(デッキインスタンスのrm_cardメソッド)
-            p2c = self.deck.rm_card()  # Player2がカードを1枚引く
-            p1n = self.p1.name
-            p2n = self.p2.name
+            self.p1.card = self.deck.draw()  # Player1がカードを1枚引く(デッキインスタンスのrm_cardメソッド)
+            self.p2.card = self.deck.draw()  # Player2がカードを1枚引く
+            # p1n = self.p1.name
+            # p2n = self.p2.name
 
             self.cnt_round += 1
             print("Round {}...".format(self.cnt_round))
-            self.draw(p1n, p1c, p2n, p2c)
+            self.print_draw(self.p1, self.p2)
             # ラウンドの勝利判定
-            if p1c > p2c:
+            if self.p1.card > self.p2.card:
                 self.p1.wins += 1
-                self.wins(self.p1.name)
+                self.print_winner(self.p1)
             else:
                 self.p2.wins += 1
-                self.wins(self.p2.name)
-            print("{} {} wins : {} {} wins.".format(p1n, self.p1.wins, p2n, self.p2.wins))
+                self.print_winner(self.p2)
+            self.print_score(self.p1, self.p2)
 
         win = self.winner(self.p1, self.p2)
         print("The war is over... {} is winning!".format(win))
